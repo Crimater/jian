@@ -8,116 +8,568 @@
     <meta name="keywords" content="流量优品">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="Robots" contect="all">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: #1a1a2e;
+            color: #fff;
+            overflow-x: hidden;
+            touch-action: pan-y;
+        }
+        
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 40px;
+        }
+        
+        /* 导航样式 */
+        .hander {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        #nav-menu {
+            display: flex;
+            justify-content: space-around;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            padding: 0 10px;
+        }
+        
+        #nav-menu::-webkit-scrollbar {
+            display: none;
+        }
+        
+        #nav-menu a {
+            color: #ccc;
+            text-decoration: none;
+            padding: 10px 15px;
+            white-space: nowrap;
+            font-size: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        #nav-menu a.active {
+            color: #4ecca3;
+        }
+        
+        #nav-menu a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 2px;
+            background: #4ecca3;
+        }
+        
+        /* 内容区域样式 */
+        .content {
+            margin-top: 50px;
+            padding: 20px 0;
+        }
+        
+        section {
+            display: none;
+            padding: 20px;
+            min-height: calc(100vh - 90px);
+        }
+        
+        section.active-section {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .main {
+            position: relative;
+            text-align: center;
+        }
+        
+        .bgo, .bgt {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+        
+        .ato, .ats {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 20px auto;
+            border: 3px solid #4ecca3;
+            box-shadow: 0 0 20px rgba(78, 204, 163, 0.5);
+        }
+        
+        .name {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #4ecca3;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .motto {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #eee;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .navo ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        
+        .navo li {
+            margin: 10px;
+        }
+        
+        .navo a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(78, 204, 163, 0.2);
+            color: #4ecca3;
+            font-size: 20px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .navo a:hover {
+            background: #4ecca3;
+            color: #1a1a2e;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(78, 204, 163, 0.4);
+        }
+        
+        /* 站点样式 */
+        .box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        #boxs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        
+        .web {
+            background: rgba(78, 204, 163, 0.1);
+            border: 1px solid #4ecca3;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .web:hover {
+            background: rgba(78, 204, 163, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(78, 204, 163, 0.3);
+        }
+        
+        .tips {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 20px;
+            color: #4ecca3;
+            font-size: 14px;
+        }
+        
+        /* 关于样式 */
+        .about {
+            background: rgba(78, 204, 163, 0.1);
+            border-left: 3px solid #4ecca3;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .about p {
+            line-height: 1.6;
+            color: #eee;
+        }
+        
+        /* 历程样式 */
+        .track-list {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .track-list::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            height: 100%;
+            width: 2px;
+            background: #4ecca3;
+        }
+        
+        .track-list ul {
+            list-style: none;
+        }
+        
+        .track-list li {
+            margin-bottom: 30px;
+            position: relative;
+            padding-left: 50px;
+        }
+        
+        .node-icon {
+            position: absolute;
+            left: 10px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: #1a1a2e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+        
+        .node-icon img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .time {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .txt {
+            display: block;
+        }
+        
+        /* 底部样式 */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background: rgba(26, 26, 46, 0.9);
+            backdrop-filter: blur(10px);
+            font-size: 14px;
+            color: #4ecca3;
+            z-index: 1000;
+        }
+        
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            #nav-menu {
+                justify-content: flex-start;
+                padding-bottom: 5px;
+            }
+            
+            #nav-menu a {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .ato, .ats {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .name {
+                font-size: 24px;
+            }
+            
+            .motto {
+                font-size: 16px;
+            }
+            
+            #boxs {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .web {
+                min-height: 80px;
+                padding: 15px;
+                font-size: 14px;
+            }
+            
+            .about {
+                margin: 15px;
+                padding: 12px;
+            }
+            
+            .track-list li {
+                padding-left: 40px;
+            }
+            
+            .node-icon {
+                left: 5px;
+            }
+        }
+        
+        /* 滑动指示器 */
+        .nav-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background: #4ecca3;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+    </style>
 </head>
-	<body>
-		<div class="container"><!-- 主体开始 -->
-			<div class="hander"><!-- 导航开始 -->
-				<nav id="nav-menu">
-					<a href="#" data-rel="home-me-section" class="active">首页</a>
-						<a href="#" data-rel="website-exp-section">站点</a>
-					<a href="#" data-rel="about-exp-section">关于</a>
-					<a href="#" data-rel="course-exp-section">历程</a>
-				
-					</nav>
-				</div><!-- 导航结束 -->
-			<div class="content"><!-- 内容开始 -->
-				<section class="home-me-section active-section"><!-- 首页开始 -->
-					<div class="main"><!-- 首页内容 -->
-						<img src="img/bgo.jpg" class="bgo" />
-						<img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ato" onclick="alert('戳我干嘛 ￣へ￣')" />
-						<div class="name" onclick="javascript:this.innerHTML=(this.innerHTML=='流量优品'?'FlowBest':'流量优品');">流量优品</div>
-						<div class="motto" onclick="javascript:this.innerHTML=(this.innerHTML=='心存敬畏 行有所止'?'Be in awe and stop':'心存敬畏 行有所止');">心存敬畏 行有所止</div>
-						<div class="navo">
-							<ul>
-								<li><a href="https://qm.qq.com/q/MRHK83sRGM" target="_blank"><i class="fab fa-qq"></i></a></li><!-- QQ -->
-								<li><a href="javascript:;" onclick="alert('微信：Z521e1e2x88o')"><i class="fab fa-wechat"></i></a></li><!-- 微信联系 -->
-								<li><a href="https://x.com/NoahBro95213541?t=XfXtiKrpNrR4yIS_4Jnr-g&s=09" target="_blank"><i class="fab fa-twitter"></i></a></li><!-- twitter -->
-								<li><a href="https://github.com/" target="_blank"><i class="fab fa-github"></i></a></li><!-- github -->
-								<li><a href="https://baidu.com" target="_blank"><i class="fas fa-paw"></i></a></li><!-- 百度 -->
-								<li><a href="mailto:1460330323@qq.com" target="_blank"><i class="fas fa-envelope"></i></a></li><!-- 邮箱 -->
-							</ul>
-						</div>
-					</div><!-- 首页内容结束 -->
-					</section><!-- 首页结束 -->
-						<section class="website-exp-section"><!-- 站点开始 -->
-					<div class="main"><!-- 站点内容开始 -->
-						<img src="img/bgt.jpg" class="bgt" />
-						<img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
-							<div class="box">
-							<div id="boxs">
-						<a href="https://crimater.github.io/DaoHang/" target="_blank"><div class="web">一为导航</div></a>
-						<a href="https://crimater.github.io/LLYP/" target="_blank"><div class="web">我的商城</div></a><!-- 站点一 -->
-							<a href="https://crimater.github.io/DL/" target="_blank"><div class="web">注册代理</div></a>
-								<a href="https://crimater.github.io/TuChuang/" target="_blank"><div class="web">免费图床</div></a>
-								<a href="https://crimater.github.io/520/" target="_blank"><div class="web">表白网页</div></a>
-						<div class="web" onclick="alert('敬请期待')">敬请期待</div>
-						<div class="tips">所有站点均正常运行</div>
-						</div><!-- 站点内容结束 -->
-					</section><!-- 站点结束 -->
-				<section class="about-exp-section"><!-- 关于开始 -->
-					<div class="main"><!-- 关于内容 -->
-						<img src="img/bgt.jpg" class="bgt" />
-						<img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
-						<div class="about">
-							<p>>_全民制作人 大家好
-							<br>>_我是练习时长两年半的个人练习生鲲鲲，喜欢唱、跳、rap、篮球、music
-							</p>
-						</div>
-						<div class="about" style="margin-top:20px;">
-						    <p>希望与大家一起交流学习
-							<br>这条路我才刚刚迈开了我的第一步
-							<br>路上的坎一定会非常多，但在我眼里
-							<br>没有什么问题是尝试不能解决的，
-							<br>即使前方的路看似绝境，也要有硬生生给自己开出一条路的勇气</p>
-						</div>
-					</div><!-- 关于内容结束 -->
-					</section><!-- 关于结束 -->
-					
-				<section class="course-exp-section"><!-- 历程开始 -->
-					<div class="main"><!-- 历程内容 -->
-						<img src="img/bgt.jpg" class="bgt" />
-						<img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
-						<div class="box">
-							<div id="boxs">
-								<div class="track-list"><!-- 时间轴开始 -->
-								<ul>
-									<li>
-										<i class="node-icon"><img src="img/tbl.svg"></i>
-										<span class="time" style="color:#2ECC71">2023-7-22</span>
-										<span class="txt" style="color:#2ECC71">开通代理注册</span>
-									</li>
-									<li>
-										<i class="node-icon"><img src="img/tbl.svg"></i>
-										<span class="time" style="color:#2ECC71">2022-6-8</span>
-										<span class="txt" style="color:#2ECC71">对接流量卡商城</span>
-									</li>
-									<li>
-										<i class="node-icon"><img src="img/tbl.svg"></i>
-										<span class="time" style="color:#2ECC71">2022-4-28</span>
-										<span class="txt" style="color:#2ECC71">搭建</span>
-									</li>
-									
-								</ul>
-							<!-- 时间轴结束 -->
-						</div>
-					</div>
-					<!-- <div style="color:#aaa;text-align:center;font-size:12px">注: 上下滑动查看历史进程</div>	-->
-					</div>
-					</div><!-- 历程内容结束 -->
-				</section><!-- 历程结束 -->
-					
+<body>
+    <div class="container"><!-- 主体开始 -->
+        <div class="hander"><!-- 导航开始 -->
+            <nav id="nav-menu">
+                <div class="nav-indicator"></div>
+                <a href="#" data-rel="home-me-section" class="active">首页</a>
+                <a href="#" data-rel="website-exp-section">站点</a>
+                <a href="#" data-rel="about-exp-section">关于</a>
+                <a href="#" data-rel="course-exp-section">历程</a>
+            </nav>
+        </div><!-- 导航结束 -->
+        
+        <div class="content"><!-- 内容开始 -->
+            <section class="home-me-section active-section"><!-- 首页开始 -->
+                <div class="main"><!-- 首页内容 -->
+                    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="bgo" />
+                    <img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ato" onclick="alert('戳我干嘛 ￣へ￣')" />
+                    <div class="name" onclick="javascript:this.innerHTML=(this.innerHTML=='流量优品'?'FlowBest':'流量优品');">流量优品</div>
+                    <div class="motto" onclick="javascript:this.innerHTML=(this.innerHTML=='心存敬畏 行有所止'?'Be in awe and stop':'心存敬畏 行有所止');">心存敬畏 行有所止</div>
+                    <div class="navo">
+                        <ul>
+                            <li><a href="https://qm.qq.com/q/MRHK83sRGM" target="_blank"><i class="fab fa-qq"></i></a></li><!-- QQ -->
+                            <li><a href="javascript:;" onclick="alert('微信：Z521e1e2x88o')"><i class="fab fa-wechat"></i></a></li><!-- 微信联系 -->
+                            <li><a href="https://x.com/NoahBro95213541?t=XfXtiKrpNrR4yIS_4Jnr-g&s=09" target="_blank"><i class="fab fa-twitter"></i></a></li><!-- twitter -->
+                            <li><a href="https://github.com/" target="_blank"><i class="fab fa-github"></i></a></li><!-- github -->
+                            <li><a href="https://baidu.com" target="_blank"><i class="fas fa-paw"></i></a></li><!-- 百度 -->
+                            <li><a href="mailto:1460330323@qq.com" target="_blank"><i class="fas fa-envelope"></i></a></li><!-- 邮箱 -->
+                        </ul>
+                    </div>
+                </div><!-- 首页内容结束 -->
+            </section><!-- 首页结束 -->
+            
+            <section class="website-exp-section"><!-- 站点开始 -->
+                <div class="main"><!-- 站点内容开始 -->
+                    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="bgt" />
+                    <img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
+                    <div class="box">
+                        <div id="boxs">
+                            <a href="https://crimater.github.io/DaoHang/" target="_blank"><div class="web">一为导航</div></a>
+                            <a href="https://crimater.github.io/LLYP/" target="_blank"><div class="web">我的商城</div></a><!-- 站点一 -->
+                            <a href="https://crimater.github.io/DL/" target="_blank"><div class="web">注册代理</div></a>
+                            <a href="https://crimater.github.io/TuChuang/" target="_blank"><div class="web">免费图床</div></a>
+                            <a href="https://crimater.github.io/520/" target="_blank"><div class="web">表白网页</div></a>
+                            <div class="web" onclick="alert('敬请期待')">敬请期待</div>
+                            <div class="tips">所有站点均正常运行</div>
+                        </div>
+                    </div><!-- 站点内容结束 -->
+            </section><!-- 站点结束 -->
+            
+            <section class="about-exp-section"><!-- 关于开始 -->
+                <div class="main"><!-- 关于内容 -->
+                    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="bgt" />
+                    <img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
+                    <div class="about">
+                        <p>>_全民制作人 大家好
+                        <br>>_我是练习时长两年半的个人练习生鲲鲲，喜欢唱、跳、rap、篮球、music
+                        </p>
+                    </div>
+                    <div class="about" style="margin-top:20px;">
+                        <p>希望与大家一起交流学习
+                        <br>这条路我才刚刚迈开了我的第一步
+                        <br>路上的坎一定会非常多，但在我眼里
+                        <br>没有什么问题是尝试不能解决的，
+                        <br>即使前方的路看似绝境，也要有硬生生给自己开出一条路的勇气</p>
+                    </div>
+                </div><!-- 关于内容结束 -->
+            </section><!-- 关于结束 -->
+            
+            <section class="course-exp-section"><!-- 历程开始 -->
+                <div class="main"><!-- 历程内容 -->
+                    <img src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" class="bgt" />
+                    <img src="https://img20.360buyimg.com/openfeedback/jfs/t1/334250/25/10232/20354/68bcff78F62799787/a6e3f9282f5579b5.png" class="ats" />
+                    <div class="box">
+                        <div id="boxs">
+                            <div class="track-list"><!-- 时间轴开始 -->
+                                <ul>
+                                    <li>
+                                        <i class="node-icon"><img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4c5.svg"></i>
+                                        <span class="time" style="color:#2ECC71">2023-7-22</span>
+                                        <span class="txt" style="color:#2ECC71">开通代理注册</span>
+                                    </li>
+                                    <li>
+                                        <i class="node-icon"><img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4c5.svg"></i>
+                                        <span class="time" style="color:#2ECC71">2022-6-8</span>
+                                        <span class="txt" style="color:#2ECC71">对接流量卡商城</span>
+                                    </li>
+                                    <li>
+                                        <i class="node-icon"><img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1f4c5.svg"></i>
+                                        <span class="time" style="color:#2ECC71">2022-4-28</span>
+                                        <span class="txt" style="color:#2ECC71">搭建</span>
+                                    </li>
+                                </ul>
+                            <!-- 时间轴结束 -->
+                        </div>
+                    </div>
+                </div><!-- 历程内容结束 -->
+            </section><!-- 历程结束 -->
+        </div><!-- 内容结束 -->
+    </div><!-- 主体结束 -->
+    
+    <div class="footer"><!-- 底部版权 -->
+        <span id="sitetime">本站已安全运行 123 天</span><!-- 运行时间 -->
+    </div><!-- 版权结束 -->
 
-			
-				</div><!-- 内容结束 -->
-			</div><!-- 主体结束 -->
-		<div class="footer"><!-- 底部版权 -->
-		<span id="sitetime"></span><!-- 运行时间 -->
-        </div><!-- 版权结束 -->
-		<script src="./js/index.js"></script><!-- 核心插件 -->
-		<script src="./js/all.js"></script><!-- 图标库 -->
-		<script src="./js/Sitetime.js"></script><!-- 运行时间 -->
-		<script src="./js/Mouse.js"></script><!-- 点击烟花特效 -->
-		<script src="//music.clwl.online/Player/player.min.js" id="SinKingMusic" key="390"></script><!-- 音乐播放 -->
-	</body>
+    <script>
+        // 导航菜单功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const navMenu = document.getElementById('nav-menu');
+            const navLinks = navMenu.querySelectorAll('a');
+            const sections = document.querySelectorAll('section');
+            const navIndicator = document.createElement('div');
+            navIndicator.className = 'nav-indicator';
+            navMenu.appendChild(navIndicator);
+            
+            // 设置初始指示器位置
+            const activeLink = navMenu.querySelector('a.active');
+            if (activeLink) {
+                setIndicator(activeLink);
+            }
+            
+            // 点击导航切换
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 更新活动链接
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 更新指示器位置
+                    setIndicator(this);
+                    
+                    // 显示对应部分
+                    const targetSection = document.querySelector(this.getAttribute('data-rel'));
+                    sections.forEach(s => s.classList.remove('active-section'));
+                    targetSection.classList.add('active-section');
+                });
+            });
+            
+            // 设置指示器位置和宽度
+            function setIndicator(element) {
+                navIndicator.style.width = `${element.offsetWidth}px`;
+                navIndicator.style.left = `${element.offsetLeft}px`;
+            }
+            
+            // 触摸滑动功能
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const content = document.querySelector('.content');
+            
+            content.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            content.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                const minSwipeDistance = 50; // 最小滑动距离
+                
+                if (touchEndX < touchStartX && touchStartX - touchEndX > minSwipeDistance) {
+                    // 左滑 - 下一个菜单项
+                    switchToNextNav();
+                } 
+                
+                if (touchEndX > touchStartX && touchEndX - touchStartX > minSwipeDistance) {
+                    // 右滑 - 上一个菜单项
+                    switchToPrevNav();
+                }
+            }
+            
+            function switchToNextNav() {
+                const activeIndex = Array.from(navLinks).findIndex(link => link.classList.contains('active'));
+                const nextIndex = (activeIndex + 1) % navLinks.length;
+                
+                navLinks[nextIndex].click();
+            }
+            
+            function switchToPrevNav() {
+                const activeIndex = Array.from(navLinks).findIndex(link => link.classList.contains('active'));
+                const prevIndex = (activeIndex - 1 + navLinks.length) % navLinks.length;
+                
+                navLinks[prevIndex].click();
+            }
+            
+            // 键盘导航支持
+            document.addEventListener('keydown', e => {
+                if (e.key === 'ArrowRight') {
+                    switchToNextNav();
+                } else if (e.key === 'ArrowLeft') {
+                    switchToPrevNav();
+                }
+            });
+        });
+    </script>
+</body>
 </html>
